@@ -1,0 +1,290 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>Project Guide — Hotel Booking Website (Two Architectures + Prototypes)</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <style>
+    :root{--bg:#f6f8fb;--card:#fff;--accent:#0a66c2;--muted:#6b7280}
+    body{font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial; background:var(--bg); color:#0f172a; margin:20px; line-height:1.45}
+    .container{max-width:980px;margin:0 auto}
+    header{display:flex;align-items:center;gap:12px;margin-bottom:18px}
+    h1{font-size:1.4rem;margin:0}
+    .card{background:var(--card);border-radius:12px;padding:18px;box-shadow:0 6px 18px rgba(15,23,42,0.07);margin-bottom:14px}
+    pre{background:#0f172a;color:#e6eef8;padding:12px;border-radius:8px;overflow:auto;}
+    code{background:#eef2ff;padding:2px 6px;border-radius:6px;font-family:ui-monospace, SFMono-Regular, Menlo, Monaco, "Roboto Mono", monospace}
+    .row{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+    button.copy{background:var(--accent);color:white;border:none;padding:8px 10px;border-radius:8px;cursor:pointer}
+    ul{margin:8px 0 8px 20px}
+    .muted{color:var(--muted)}
+    .badge{display:inline-block;background:#eef2ff;color:var(--accent);padding:4px 8px;border-radius:999px;font-weight:600;font-size:0.85rem}
+    footer{font-size:0.9rem;color:var(--muted);margin-top:8px}
+    .two-col{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+    @media (max-width:760px){.two-col{grid-template-columns:1fr}}
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <div>
+        <h1>Project Plan — Hotel Booking Website</h1>
+        <div class="muted">Design two architectures, implement prototypes, document with UML, and compare.</div>
+      </div>
+      <div style="margin-left:auto"><span class="badge">Deliverable-ready</span></div>
+    </header>
+
+    <div class="card">
+      <strong>Task summary</strong>
+      <p>Choose the real-world problem: <strong>Hotel Booking Website</strong>. For this problem:
+      <ol>
+        <li>Design the system in <strong>two architectural styles</strong> (e.g., Monolith (MVC) vs Microservices, or Client-Server vs MVC).</li>
+        <li>Implement working prototypes for both designs (minimal but runnable).</li>
+        <li>Create UML diagrams (component/class/sequence/ deployment as appropriate) for each design.</li>
+        <li>Write a comparative report describing strengths, weaknesses, trade-offs, and conclusions.</li>
+      </ol>
+      </p>
+    </div>
+
+    <div class="card">
+      <strong>Suggested architecture pair (recommended)</strong>
+      <div class="two-col" style="margin-top:10px">
+        <div>
+          <h3 style="margin:6px 0">Option A — Monolith (MVC)</h3>
+          <ul>
+            <li>Single codebase (backend + server-rendered views or single-page app + API)</li>
+            <li>Simple DB (SQLite or Postgres)</li>
+            <li>Good for MVP & small teams</li>
+          </ul>
+        </div>
+        <div>
+          <h3 style="margin:6px 0">Option B — Microservices</h3>
+          <ul>
+            <li>Small independent services: <em>auth</em>, <em>hotel-catalog</em>, <em>booking</em>, <em>gateway/frontend</em></li>
+            <li>Each service can have its own DB</li>
+            <li>Use an API Gateway and simple auth token</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <strong>Suggested tech stack (pick what you know)</strong>
+      <ul>
+        <li>Backend: Python + Flask (or Node.js + Express, Java Spring Boot)</li>
+        <li>DB: SQLite for quick prototype, PostgreSQL for realistic</li>
+        <li>Frontend: simple HTML/CSS + vanilla JS or React for more polish</li>
+        <li>Tools: PlantUML for diagrams, Git for version control</li>
+      </ul>
+    </div>
+
+    <div class="card">
+      <strong>Repository layout (what to include)</strong>
+      <p>Place both prototypes in one repo under different folders:</p>
+      <pre>
+hotel-booking-architectures/
+├─ monolith/
+│  ├─ app.py (or server.js)
+│  ├─ templates/ or frontend/
+│  ├─ requirements.txt or package.json
+│  └─ monolith_uml.puml
+├─ microservices/
+│  ├─ gateway/
+│  ├─ hotel-service/
+│  ├─ booking-service/
+│  ├─ auth-service/
+│  ├─ docker-compose.yml (optional)
+│  └─ microservices_uml.puml
+├─ comparative_report.md
+└─ README.md
+      </pre>
+      <div class="muted">Tip: Add .gitignore and a short README in each folder explaining how to run that prototype.</div>
+    </div>
+
+    <div class="card">
+      <strong>Monolith prototype — minimal implementation checklist</strong>
+      <ol>
+        <li>Create `monolith/app.py` (Flask) exposing:
+          <ul>
+            <li>`GET /` — homepage</li>
+            <li>`GET /hotels` — list hotels (JSON)</li>
+            <li>`POST /book` — book a room</li>
+          </ul>
+        </li>
+        <li>Use SQLite, init DB on startup, seed sample hotels</li>
+        <li>Simple UI: `templates/index.html` to show hotels and a Book button</li>
+        <li>Add `monolith/monolith_uml.puml` — component or class diagram</li>
+      </ol>
+
+      <div style="margin-top:8px">
+        <strong>Example minimal Flask (monolith/app.py)</strong>
+        <pre>from flask import Flask, request, jsonify, render_template
+app = Flask(__name__)
+@app.route('/')
+def index(): return render_template('index.html')
+@app.route('/hotels') 
+def hotels(): return jsonify([...])
+@app.route('/book', methods=['POST'])
+def book(): return jsonify({'status':'ok'})</pre>
+      </div>
+    </div>
+
+    <div class="card">
+      <strong>Microservices prototype — minimal implementation checklist</strong>
+      <ol>
+        <li>Services:
+          <ul>
+            <li><code>hotel-service</code> — exposes <code>/hotels</code></li>
+            <li><code>booking-service</code> — exposes <code>/book</code></li>
+            <li><code>auth-service</code> — simple token issue & check</li>
+            <li><code>api-gateway</code> — proxies requests and forwards auth</li>
+          </ul>
+        </li>
+        <li>Each service is a small Flask/Express app (or minimal Node script).</li>
+        <li>Provide `microservices/microservices_uml.puml` (component diagram + sequence diagram showing booking flow).</li>
+        <li>Optionally include `docker-compose.yml` to run all services locally.</li>
+      </ol>
+
+      <div style="margin-top:8px">
+        <strong>Example docker-compose snippet (microservices/docker-compose.yml)</strong>
+        <pre>version: '3.8'
+services:
+  gateway:
+    build: ./gateway
+    ports: ["5000:5000"]
+  hotel:
+    build: ./hotel-service
+    ports: ["5001:5001"]
+  booking:
+    build: ./booking-service
+    ports: ["5002:5002"]
+  auth:
+    build: ./auth-service
+    ports: ["5003:5003"]</pre>
+      </div>
+    </div>
+
+    <div class="card">
+      <strong>UML diagrams to create</strong>
+      <ul>
+        <li><strong>Monolith</strong>: Component diagram (MVC components), Class diagram for core domain (Hotel, Room, Booking).</li>
+        <li><strong>Microservices</strong>: Component diagram showing services + gateway, Sequence diagram for "book a room" flow, Deployment diagram (services & ports).</li>
+      </ul>
+      <div class="muted">Provide PlantUML <code>.puml</code> files and render them to PNG or SVG for the final report.</div>
+    </div>
+
+    <div class="card">
+      <strong>Comparative report structure (comparative_report.md)</strong>
+      <ol>
+        <li>Executive summary — one paragraph</li>
+        <li>Architecture descriptions — diagrams + explanation</li>
+        <li>Implementation notes — what each prototype contains and how to run</li>
+        <li>Comparison — scalability, maintainability, deployment, fault tolerance, complexity</li>
+        <li>Decision & conclusion — recommended approach and justification</li>
+      </ol>
+    </div>
+
+    <div class="card">
+      <strong>How to run and test locally (example commands)</strong>
+      <p class="muted">Run each prototype in separate terminals (or use docker-compose).</p>
+      <div class="row">
+        <div style="flex:1">
+          <strong>Monolith (example)</strong>
+          <pre id="cmd-mono">cd monolith
+python3 -m venv venv
+source venv/bin/activate    # Windows: venv\Scripts\activate
+pip install -r requirements.txt
+python app.py
+# open http://127.0.0.1:5000/</pre>
+        </div>
+        <div>
+          <button class="copy" data-target="cmd-mono">Copy</button>
+        </div>
+      </div>
+
+      <div style="margin-top:10px" class="row">
+        <div style="flex:1">
+          <strong>Microservices (example)</strong>
+          <pre id="cmd-micro">cd microservices
+# start services in multiple terminals:
+python hotel-service/app.py
+python booking-service/app.py
+python auth-service/app.py
+python gateway/app.py
+# open gateway at http://127.0.0.1:5000/</pre>
+        </div>
+        <div><button class="copy" data-target="cmd-micro">Copy</button></div>
+      </div>
+
+      <div style="margin-top:8px" class="muted">Or, if you add docker-compose, run <code>docker-compose up --build</code>.</div>
+    </div>
+
+    <div class="card">
+      <strong>How to document & upload</strong>
+      <ol>
+        <li>Write README.md for repository root with overview and run instructions for both prototypes.</li>
+        <li>Include UML `.puml` files and rendered images `.png` in each folder.</li>
+        <li>Initialize Git, commit, and push to a Git host (GitHub/GitLab). Use the steps in the previous HTML you have for Git commands.</li>
+      </ol>
+    </div>
+
+    <div class="card">
+      <strong>Evaluation checklist (what to submit)</strong>
+      <ul>
+        <li>[ ] Monolith prototype (code + run instructions)</li>
+        <li>[ ] Microservices prototype (code + run instructions)</li>
+        <li>[ ] UML files for both architectures (.puml + rendered images)</li>
+        <li>[ ] Comparative report (comparative_report.md or PDF)</li>
+        <li>[ ] README + .gitignore</li>
+        <li>[ ] Git repo URL (public or private with access)</li>
+      </ul>
+    </div>
+
+    <div class="card">
+      <strong>Quick starter templates (copyable)</strong>
+      <p><em>Monolith app starter (save as <code>monolith/app.py</code>)</em></p>
+      <pre id="mono-code">from flask import Flask, render_template, request, jsonify
+import sqlite3, os
+app = Flask(__name__)
+DB = os.path.join(os.path.dirname(__file__),'data.db')
+# init DB and simple routes...
+</pre>
+      <div style="margin-top:8px"><button class="copy" data-target="mono-code">Copy</button></div>
+
+      <p style="margin-top:12px"><em>Microservice example (hotel-service/app.py)</em></p>
+      <pre id="micro-code">from flask import Flask, jsonify
+app = Flask(__name__)
+@app.route('/hotels')
+def hotels():
+    return jsonify([{"id":1,"name":"Hotel A","rooms":5}])
+if __name__=='__main__':
+    app.run(port=5001)</pre>
+      <div style="margin-top:8px"><button class="copy" data-target="micro-code">Copy</button></div>
+    </div>
+
+    <footer class="card">
+      <div class="muted">Need help generating: Dockerfiles, docker-compose.yml, PlantUML diagrams, or filling in the prototype code? Reply which item you'd like me to create and I'll produce the files ready to paste into your project.</div>
+    </footer>
+  </div>
+
+  <script>
+    document.querySelectorAll('button.copy').forEach(btn=>{
+      btn.addEventListener('click', async ()=> {
+        const id = btn.getAttribute('data-target');
+        const pre = document.getElementById(id);
+        const text = pre ? pre.innerText : '';
+        try {
+          await navigator.clipboard.writeText(text);
+          btn.textContent = 'Copied ✓';
+          setTimeout(()=>btn.textContent='Copy',1300);
+        } catch(e){
+          const ta = document.createElement('textarea');
+          ta.value = text; document.body.appendChild(ta); ta.select();
+          document.execCommand('copy'); document.body.removeChild(ta);
+          btn.textContent = 'Copied ✓';
+          setTimeout(()=>btn.textContent='Copy',1300);
+        }
+      });
+    });
+  </script>
+</body>
+</html>
